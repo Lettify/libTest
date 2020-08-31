@@ -1,3 +1,10 @@
+function sendDebug(name, message, i)
+    return {
+        failed = function(name, i) print(debug.getinfo(i).short_src .. ':'..debug.getinfo(i).currentline .. ' ['..name..'] - Test has Failed!') end,
+        sucess = function(name, i) print(debug.getinfo(i).short_src .. ':'..debug.getinfo(i).currentline .. ' ['..name..'] - Test has Succeed!') end,
+    }
+end
+
 function createTests(name, array)
     return {
         __name = name,
@@ -17,12 +24,15 @@ function describe(name, func)
     } 
 end
 
-function expected(name, f)
-    local f = type(f) == 'function' and f() or f
+function expected(name,func)
+    local f = type(func) == 'function' and func() or func
     return {
         toBe = function(n)
-            assert(f == n, '[expected().toBe] - Test has failed!')
-            return true
+            if f == n then 
+                sendDebug().sucess(name, 3)
+            else 
+                sendDebug().failed(name, 3)
+            end 
         end,
     }
 end

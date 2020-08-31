@@ -1,2 +1,7 @@
-# lua-units
-[Lua] - Sistema de Testes com suporte ao MTA
+# [Lua] libTest 
+
+## Funções 
+
+- descibre(name, function)
+    - Descreve um teste 
+

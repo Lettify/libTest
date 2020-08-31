@@ -2,9 +2,8 @@ function createTests(name, array)
     return {
         __name = name,
         __array = array,
-        run = function(self)
-            for i, v in pairs(self.__array) do v:run() end
-        end,
+        runAll = function(self) for i, v in pairs(self.__array) do v:run() end end,
+        runTest = function(self, i) if self.__array[i] ~= nil then self.__array[i]:run() end end,
     }
 end
 
@@ -18,8 +17,13 @@ function describe(name, func)
     } 
 end
 
-createTests('teste', {
-    sum = describe('sum', function()
-        print('Dentro do Sum!')
-    end)
-})
+function expected(name, f)
+    local f = type(f) == 'function' and f() or f
+    return {
+        toBe = function(n)
+            assert(f == n, '[expected().toBe] - Test has failed!')
+            return true
+        end,
+    }
+end
+

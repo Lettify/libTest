@@ -61,9 +61,9 @@ end
 function expected(name, func, ...)
     local f = functionHasReturn(func) and executeInstance(func, ...) or func
     return {
-        toBe = function(n) sendDebug().result(f == n, name, 3) end,
-        toReturn = function(n) sendDebug().result(f == n, name, 3) end,
-        toReturnType = function(s) sendDebug().result(type(f) == s, name , 3) end,
+        toBe = function(n) sendDebug().result(f == n, name, 4) end,
+        toReturn = function(n) sendDebug().result(f == n, name, 4) end,
+        toReturnType = function(s) sendDebug().result(type(f) == s, name , 4) end,
     }
 end
 

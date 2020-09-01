@@ -17,17 +17,19 @@ function sendDebug(name, message, i)
 end
 
 function functionHasReturn(func)
-   local d = string.dump(func)
-   assert(d:sub(1,5) == "\27LuaQ") 
-   d = d:match"^.-\30%z\128%z"
-   for pos = #d % 4 + 1, #d, 4 do
-      local b1, b2, b3, b4 = d:byte(pos, pos+3)
-      local dword = b1 + 256 * (b2 + 256 * (b3 + 256 * b4))
-      local OpCode, BC = dword % 64, math.floor(dword/16384)
-      local B, C = math.floor(BC/512), BC % 512
-      if OpCode == 30 and C == 0 and B ~= 1 then return true end
-   end
-   return false
+    if type(func) == 'function' then 
+       local d = string.dump(func)
+       assert(d:sub(1,5) == "\27LuaQ") 
+       d = d:match"^.-\30%z\128%z"
+       for pos = #d % 4 + 1, #d, 4 do
+          local b1, b2, b3, b4 = d:byte(pos, pos+3)
+          local dword = b1 + 256 * (b2 + 256 * (b3 + 256 * b4))
+          local OpCode, BC = dword % 64, math.floor(dword/16384)
+          local B, C = math.floor(BC/512), BC % 512
+          if OpCode == 30 and C == 0 and B ~= 1 then return true end
+       end
+    end 
+    return false
 end
 
 function executeInstance(func, ...)
@@ -41,7 +43,7 @@ function createTests(name, array)
     return {
         __name = name,
         __array = array,
-        runAll = function(self) for i, v in pairs(self.__array) do v:run() end end,
+        runAllTests = function(self) for i, v in pairs(self.__array) do v:run() end end,
         runTest = function(self, i) if self.__array[i] ~= nil then self.__array[i]:run() end end,
     }
 end
@@ -65,9 +67,5 @@ function expected(name, func, ...)
     }
 end
 
-function sum(a,b) 
-    return a + b
-end
+return importAllTestFunctions
 
-
-print(expected('sum', sum, 1, 2).toReturnType('string'))

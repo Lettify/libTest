@@ -1,10 +1,37 @@
-createTests('tests', {
-    sum = describe('sum', function()
-        local a = 1
-        local b = 1
+require('libTest')()
 
-        local sum = a + b
-        print(expected('sum', sum).toBe(2))
+createTests('Primeiro Teste', {
+    describe('teste do Sum!', function()
+        local a = 5
+        local b = 10
+
+        expected('sum test', sum, a, b).toBe(15)
+    end),
+
+    describe('teste do mut', function()
+        local a = 5
+        local b = 2
+
+        expected('mut test', mut, a, b).toReturn(11)
+    end),
+
+    describe('teste do return', function()
+        expected('concat test', function(a, b)
+            return a..b
+        end, 'a', 'b').toReturnType('string')
     end)
-}):run()
 
+}):runAllTests()
+
+
+
+
+
+
+function sum(a,b)
+    return a + b
+end
+
+function mut(a,b)
+    return a * b
+end

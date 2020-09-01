@@ -1,9 +1,19 @@
+function importAllTestFunctions()
+    return {
+        sendDebug = sendDebug,
+        functionHasReturn = functionHasReturn,
+        executeInstance = executeInstance, 
+        createTests = createTests,
+        describe = describe,
+        expected = expected,
+    }
+end
+
 function sendDebug(name, message, i)
     return {
         failed = function(name, i) print(debug.getinfo(i).short_src .. ':'..debug.getinfo(i).currentline .. ' ['..name..'] - Test has Failed!') end,
         sucess = function(name, i) print(debug.getinfo(i).short_src .. ':'..debug.getinfo(i).currentline .. ' ['..name..'] - Test has Succeed!') end,
-        result = function(condition, name, i) if condition == true then sendDebug().sucess(name, i) else sendDebug().failed(name, i) end end,
-    }
+        result = function(condition, name, i) if condition == true then sendDebug().sucess(name, i) else sendDebug().failed(name, i) end end, }
 end
 
 function functionHasReturn(func)
@@ -18,6 +28,13 @@ function functionHasReturn(func)
       if OpCode == 30 and C == 0 and B ~= 1 then return true end
    end
    return false
+end
+
+function executeInstance(func, ...)
+    if type(func) == 'function' then 
+        if functionHasReturn(func) then return func(...) end
+    end
+    return false
 end
 
 function createTests(name, array)
@@ -40,10 +57,11 @@ function describe(name, func)
 end
 
 function expected(name, func, ...)
-    local f = type(func) == 'function' and func(...) or func
+    local f = functionHasReturn(func) and executeInstance(func, ...) or func
     return {
         toBe = function(n) sendDebug().result(f == n, name, 3) end,
         toReturn = function(n) sendDebug().result(f == n, name, 3) end,
+        toReturnType = function(s) sendDebug().result(type(f) == s, name , 3) end,
     }
 end
 
@@ -51,4 +69,5 @@ function sum(a,b)
     return a + b
 end
 
-print(expected('sum', sum, 1, 3).toReturn(3))
+
+print(expected('sum', sum, 1, 2).toReturnType('string'))

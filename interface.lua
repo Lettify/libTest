@@ -1,13 +1,22 @@
 local callMeta = { __call = function(self, ...) return self:validate(...) end }
 
+function isValidInterface(interface)
+    local errors = {}
+    for field, v in pairs(interface) do 
+        if type(field) ~= 'string' or type(v) ~= 'string' then table.insert(errors, field) end
+    end
+    return #errors >= 1 and errors or true  
+end
+
 function Interface(interface, name)
+    assert(isValidInterface(interface) == true, '[Interface] - Invalid interface construction, please make sure that every field has a \'string\' value.')
     return setmetatable({
         __name = name or 'default',
         __type = 'interfaceObject',
-        interface = interface, 
+        interface = interface,
         validate = function(self, validateInterface)
             assert(type(validateInterface) == 'table', '[Interface - '..self.__name..'] - Expected a \'table\' on #1 argument and got '..type(validadeInterface)) 
-			if self:hasSameFields(validateInterface) == true then 
+            if self:hasSameFields(validateInterface) == true then 
                 local returnValue = 0
                 for field, v in pairs(validateInterface) do 
                     if self:getFieldType(field, validateInterface) == false then

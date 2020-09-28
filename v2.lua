@@ -1,6 +1,12 @@
 local Cache = {} 
 local callMeta = { __call = function(self, ...) return self:isValidInterface(...) end }
 
+function isInterface(interface)
+    if type(interface) == 'table' then
+        return interface.__type == 'interfaceObject'
+    end
+end
+
 function interfaceExists(name)
     if Cache[name] == nil then return false end 
     return true 
@@ -29,5 +35,3 @@ function Interface(name, interfaceTable)
     else returnInterface(name):validate(interfaceTable) end
 end
 
-Interface('test', { name = 'string', event = 'event' })
-Interface('test', {name = 'dev', event = 'oi'})

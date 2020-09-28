@@ -19,10 +19,9 @@ createTests('Primeiro Teste', {
         expected('concat test', function(a, b)
             return a..b
         end, 'a', 'b').toReturnType('string')
-    end)
+    end),
 
 }):runAllTests()
-
 
 
 

@@ -6,6 +6,7 @@ function importAllTestFunctions()
         createTests = createTests,
         describe = describe,
         expected = expected,
+        returnExecutionTime = returnExecutionTime,
     }
 end
 
@@ -13,7 +14,8 @@ function sendDebug(name, message, i)
     return {
         failed = function(name, i) print(debug.getinfo(i).short_src .. ':'..debug.getinfo(i).currentline .. ' ['..name..'] - Test has Failed!') end,
         sucess = function(name, i) print(debug.getinfo(i).short_src .. ':'..debug.getinfo(i).currentline .. ' ['..name..'] - Test has Succeed!') end,
-        result = function(condition, name, i) if condition == true then sendDebug().sucess(name, i) else sendDebug().failed(name, i) end end, }
+        result = function(condition, name, i) if condition == true then sendDebug().sucess(name, i) else sendDebug().failed(name, i) end end, 
+    }
 end
 
 function functionHasReturn(func)
@@ -55,6 +57,7 @@ function describe(name, func)
         run = function(self) return self.__func() end,
         getFunc = function(self) return self.__func end,
         getName = function(self) return self.__name end,
+        expected = expected,
     } 
 end
 

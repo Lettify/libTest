@@ -38,9 +38,7 @@ function Interface(name, interfaceTable)
             validateInterface = function(self, validateTable)
                 assert(type(validateTable) == 'table', '[validateInterface] - Expected a \'table\' on #1 argument and got a '..type(validateTable))
                 if self:hasSameMethods(validateTable) == true then 
-                    if self:hasSameTypes(validateTable) == true then 
-                        return true
-                    else self:getDiffTypes(validateTable) end
+                    return self:hasSameTypes(validateTable) == true or self:getDiffTypes(validateTable)
                 else self:getMissingFields(validateTable) end
             end,
             hasSameMethods = function(self, validateTable)
@@ -84,3 +82,5 @@ function Interface(name, interfaceTable)
     else return getInterfaceObject(name):validateInterface(interfaceTable) end
 end
 
+Interface('teste', { name = 'string', age = 'number'})
+Interface('teste', { name = 'dev', age = 'oi'})

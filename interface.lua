@@ -82,5 +82,3 @@ function Interface(name, interfaceTable)
     else return getInterfaceObject(name):validateInterface(interfaceTable) end
 end
 
-Interface('teste', { name = 'string', age = 'number'})
-Interface('teste', { name = 'dev', age = 'oi'})

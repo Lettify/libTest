@@ -52,11 +52,3 @@ function Interface(interface, name)
     }, callMeta)
 end
 
-local Person = Interface({
-    name = 'string',
-    age = 'number',
-    hobbies = 'table',
-    male = 'boolean'
-}, 'PersonInterface')
-
-Person({name = 'Dev', age = 23, hobbies = {}, male = true})

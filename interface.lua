@@ -1,5 +1,3 @@
--- function name(arg) *1 -> name {} -> f({}) --
-
 local GlobalInterfaces = {}
 local interfaceCallMeta = { __call = function(self, ...) return self:validateInterface(self,...) end } 
 
